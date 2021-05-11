@@ -21,3 +21,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# content and sensible files
+/src/dbconfig.php
+/src/bewerbung.php
+/src/content
