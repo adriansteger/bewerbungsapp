@@ -4,8 +4,6 @@ import axios from 'axios';
 import 'materialize-css/dist/css/materialize.min.css';
 import 'material-icons/iconfont/material-icons.css';
 
-const API_PATH = '../api/mailer.php';
-
 export default class Page extends Component {
     constructor(props) {
         super(props);
@@ -64,15 +62,14 @@ export default class Page extends Component {
         if (this.checkIfArrayEmpty() === false) {
             alert("Bitte alle Felder füllen");
         }
-        axios({
-            method: 'post',
-            url: `${API_PATH}`,
-            headers: { 'content-type': 'application/json' },
-            data: this.state
+        axios.post('/api/mailer.php', {
+            bewerbender: this.state.bewerbender,
+            beruf: this.state.beruf,
+            jobbeschreibung: this.state.jobbeschreibung,
+            geschlecht: this.state.geschlecht,
+            nachname: this.state.nachname
         }).then(result => {
-            this.setState({
-                mailSent: result.data.sent
-            })
+            console.log(result);
         }).catch(error => this.setState({ error: error.message }));
     }
     checkIfArrayEmpty() {
