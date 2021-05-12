@@ -4,7 +4,7 @@ import axios from 'axios';
 import 'materialize-css/dist/css/materialize.min.css';
 import 'material-icons/iconfont/material-icons.css';
 
-const API_PATH = 'http://localhost:80/mailer.php';
+const API_PATH = '../api/mailer.php';
 
 export default class Page extends Component {
     constructor(props) {
