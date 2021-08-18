@@ -1,10 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
-import Page from './Page';
+import "./App.css";
+import Page from "./Page";
+import Menu from "./Menu";
 
 function App() {
   return (
-    <Page size="A4" />
+    <>
+      <Menu />
+      {/* <Page size="A4" /> */}
+    </>
   );
 }
 

@@ -13,8 +13,8 @@ export default class Page extends Component {
             jobbeschreibung: "",
             geschlecht: "",
             nachname: "",
-            mailSent: "",
-            error: ""
+            mailSent: "false",
+            error: "null"
         }
     }
     render() {
@@ -62,13 +62,13 @@ export default class Page extends Component {
         if (this.checkIfArrayEmpty() === false) {
             alert("Bitte alle Felder füllen");
         }
-        axios.post('/api/mailer.php', {
-            bewerbender: this.state.bewerbender,
-            beruf: this.state.beruf,
-            jobbeschreibung: this.state.jobbeschreibung,
-            geschlecht: this.state.geschlecht,
-            nachname: this.state.nachname
+        axios.post('http://localhost:8080/api/mailer.php', {
+            headers: { 'content-type': 'application/json' },
+            data: this.state
         }).then(result => {
+            this.setState({
+                mailSent: result.data.sent
+            });
             console.log(result);
         }).catch(error => this.setState({ error: error.message }));
     }
