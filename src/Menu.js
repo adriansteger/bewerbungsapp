@@ -2,6 +2,7 @@ import React, { Component, useState } from "react";
 import M from "materialize-css";
 import Page from "./Page";
 import { render } from "@testing-library/react";
+import AppDB from "./AppDB";
 
 export class Menu extends Component {
   constructor(props) {
@@ -9,7 +10,7 @@ export class Menu extends Component {
     this.state = {
       home: false,
       page: false,
-      something: false,
+      appdb: false,
     };
   }
 
@@ -39,7 +40,7 @@ export class Menu extends Component {
                     this.setState({
                       home: "Willkommen auf dem Bewerbungstool. Das Projekt befindet sich noch in der Entwicklung und kann daher Fehler enthalten.",
                       page: "",
-                      something: "",
+                      appdb: "",
                     })
                   }
                 >
@@ -52,11 +53,8 @@ export class Menu extends Component {
                 </a>
               </li>
               <li>
-                <a
-                  href="#Something"
-                  onClick={() => this.setState({ home: "", page: "" })}
-                >
-                  Something
+                <a href="#AppDB" onClick={() => this.AppDBClick()}>
+                  Applications
                 </a>
               </li>
             </ul>
@@ -75,7 +73,7 @@ export class Menu extends Component {
                       </p>
                     ),
                     page: "",
-                    something: "",
+                    appdb: "",
                   })
                 }
               >
@@ -88,23 +86,20 @@ export class Menu extends Component {
               </a>
             </li>
             <li>
-              <a
-                href="#Something"
-                onClick={() => this.setState({ home: "", page: "" })}
-              >
-                Something
+              <a href="#AppDB" onClick={() => this.AppDBClick()}>
+                Applications
               </a>
             </li>
           </ul>
         </nav>
         {this.state.home}
         {this.state.page}
-        {this.state.something}
+        {this.state.appdb}
       </div>
     );
   }
   PageClick() {
-    this.setState({ home: "", something: "" });
+    this.setState({ home: "", appdb: "" });
     if (this.state.page) {
       this.setState({
         page: (
@@ -119,6 +114,10 @@ export class Menu extends Component {
       this.setState({ page: <Page size="A4" /> });
     }
     return false;
+  }
+  AppDBClick() {
+    this.setState({ home: "", page: "" });
+    this.setState({ appdb: <AppDB /> });
   }
 }
 
