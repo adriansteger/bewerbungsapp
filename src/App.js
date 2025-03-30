@@ -1,8 +1,7 @@
 import "./App.css";
-import Page from "./Page";
 import Menu from "./Menu";
 
-function App() {
+const App = () => {
   return (
     <>
       <Menu />

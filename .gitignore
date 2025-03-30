@@ -26,3 +26,5 @@ yarn-error.log*
 /src/dbconfig.php
 /src/bewerbung.php
 /src/content
+
+/api/node_modules
