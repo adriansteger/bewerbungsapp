@@ -1,122 +1,116 @@
-import React, { useState, useEffect } from "react";
-import M from "materialize-css";
-import * as Yup from "yup";
+import React, { useState } from 'react';
+import {
+    AppBar,
+    Toolbar,
+    IconButton,
+    Typography,
+    Drawer,
+    List,
+    ListItem,
+    ListItemButton, // Use ListItemButton for better semantics and ripple effect
+    ListItemText,
+    Box, // Use Box for the root container
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+// Removed makeStyles import
+// import { makeStyles } from '@mui/styles';
 
+// Import the components to be rendered
 import Page from "./Page";
 import AppDB from "./AppDB";
 import Login from "./Login";
 
+// Define component mapping for easier rendering
+const components = {
+    login: <Login />,
+    page: <Page size="A4" />, // Pass props here if needed
+    appDb: <AppDB />,
+};
+
 const Menu = () => {
-  const [home, setHome] = useState("");
-  const [page, setPage] = useState("");
-  const [appDb, setAppDB] = useState("");
+    // Removed classes = useStyles();
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    // Use a single state variable to track the active component key
+    const [activeComponentKey, setActiveComponentKey] = useState('login'); // Default to 'login'
 
-  const validationSchema = Yup.object().shape({
-    bewerbender: Yup.string().required("Bewerbender ist ein Pflichtfeld"),
-    beruf: Yup.string().required("Beruf ist ein Pflichtfeld"),
-    jobbeschreibung: Yup.string().required("Jobbeschreibung ist ein Pflichtfeld"),
-    geschlecht: Yup.string().required("Geschlecht ist ein Pflichtfeld"),
-    nachname: Yup.string().required("Nachname ist ein Pflichtfeld"),
-    mailSent: Yup.string().required("MailSent ist ein Pflichtfeld")
-  });
+    const toggleDrawer = (open) => (event) => {
+        if (
+            event.type === 'keydown' &&
+            (event.key === 'Tab' || event.key === 'Shift')
+        ) {
+            return;
+        }
+        setDrawerOpen(open);
+    };
 
-  useEffect(() => {
-    const elems = document.querySelector(".sidenav");
-    M.Sidenav.init(elems, {});
-  }, []);
+    // Handler to set the active component key
+    const handleNavigation = (key) => {
+        setActiveComponentKey(key);
+        setDrawerOpen(false); // Close drawer on navigation
+    };
 
-  const PageClick = () => {
-    setHome("");
-    setAppDB("");
-    if (page) {
-      setPage(
-        <h5 className="center-align red">
-          Die Seite wurde gelöscht. <br />
-          Klicken Sie auf einen anderen Tab und wieder auf diesen um ein neues Formular zu erhalten.
-        </h5>
-      );
-    } else {
-      setPage(<Page size="A4" />);
-    }
-    return false;
-  };
+    const list = () => (
+        <Box
+            sx={{ width: 250 }} // Apply width directly using sx prop
+            role="presentation"
+            onClick={toggleDrawer(false)} // Close drawer when clicking inside
+            onKeyDown={toggleDrawer(false)} // Close drawer on keydown (e.g., Esc)
+        >
+            <List>
+                {/* Map over navigation items */}
+                {[
+                    { key: 'login', text: 'Home' },
+                    { key: 'page', text: 'Page A4' },
+                    { key: 'appDb', text: 'Applications' },
+                ].map((item) => (
+                    // Use ListItemButton for clickable list items
+                    <ListItem key={item.key} disablePadding>
+                        <ListItemButton onClick={() => handleNavigation(item.key)}>
+                            <ListItemText primary={item.text} />
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+        </Box>
+    );
 
-  const AppDBClick = () => {
-    setHome("");
-    setPage("");
-    setAppDB(<AppDB />);
-  };
-
-  return (
-    <div>
-      <nav className="teal darken-4">
-        <div className="nav-wrapper">
-          <a href="#!" className="brand-logo">
-            Logo
-          </a>
-          <a href="#!" data-target="mobile-nav" className="sidenav-trigger">
-            <i className="material-icons">menu</i>
-          </a>
-          <ul className="right hide-on-med-and-down">
-            <li>
-              <a
-                href="#Home"
-                onClick={() => {
-                  setHome(<Login />);
-                  setPage("");
-                  setAppDB("");
-                }}
-              >
-                Home
-              </a>
-            </li>
-            <li>
-              <a href="#Page" onClick={PageClick}>
-                Page A4
-              </a>
-            </li>
-            <li>
-              <a href="#AppDB" onClick={AppDBClick}>
-                Applications
-              </a>
-            </li>
-          </ul>
-        </div>
-        <ul className="sidenav" id="mobile-nav">
-          <li>
-            <a
-              href="#Home"
-              onClick={() => {
-                setHome(
-                  <p className="flow-text">
-                    Willkommen auf dem Bewerbungstool. Das Projekt befindet sich noch in der
-                    Entwicklung und verfügt daher nur über eingeschränkte Funktionalität.
-                  </p>
-                );
-                setPage("");
-                setAppDB("");
-              }}
+    return (
+        // Use Box as the root element for flexGrow
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        onClick={toggleDrawer(true)}
+                        sx={{ mr: 2 }} // Apply marginRight using sx prop (mr = margin-right, 2 = theme.spacing(2))
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography
+                        variant="h6"
+                        component="div" // Use 'div' for semantic correctness as it's not the main page title
+                        sx={{ flexGrow: 1 }} // Apply flexGrow using sx prop
+                    >
+                        Logo
+                    </Typography>
+                    {/* Add other AppBar items here if needed, e.g., Login/Logout button */}
+                </Toolbar>
+            </AppBar>
+            <Drawer
+                anchor="left"
+                open={drawerOpen}
+                onClose={toggleDrawer(false)}
             >
-              Home
-            </a>
-          </li>
-          <li>
-            <a href="#Page" onClick={PageClick}>
-              Page A4
-            </a>
-          </li>
-          <li>
-            <a href="#AppDB" onClick={AppDBClick}>
-              Applications
-            </a>
-          </li>
-        </ul>
-      </nav>
-      {home}
-      {page}
-      {appDb}
-    </div>
-  );
+                {list()}
+            </Drawer>
+            {/* Render the active component based on the state key */}
+            <Box component="main" sx={{ p: 2 }}> {/* Add some padding to the main content area */}
+                {components[activeComponentKey]}
+            </Box>
+        </Box>
+    );
 };
 
 export default Menu;
